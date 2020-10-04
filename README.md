@@ -9,6 +9,8 @@
 
 # Learn Go With Tests
 
+<!-- DOCTOC SKIP -->
+
 Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-go-with-tests).
 
 ## Sections
