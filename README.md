@@ -8,10 +8,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
-
 Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-go-with-tests).
 
 ## Sections
 
-- [hello world](./01-hello-world/README.md)
+- [01 - hello world](./01-hello-world)
+- [02 - integers](./01-integers)
