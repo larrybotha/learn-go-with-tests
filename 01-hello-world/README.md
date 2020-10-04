@@ -1,4 +1,4 @@
-# Hello World
+# 01 - Hello World
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -51,6 +51,8 @@
 
 ### Tests
 
+- tests are run using `go test`
+    - verbose output can be enabled with the `-v` flag
 - test files should use the same name as that of the module they are testing,
     but with a `_test` suffix before the extension.
 - tests import the `testing` package
@@ -69,6 +71,7 @@
     }
     ```
 - tests can be failed using `t.Errorf("message", a ...interface{})`
+    - `%q` is a "verb" that can be used with formatted output and strings
 - `t.Helper()` can be used inside test helper functions to indicate that the
     function is a helper function so that line and file information is not
     printed for executions inside that function
