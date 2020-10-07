@@ -13,4 +13,5 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 ## Sections
 
 - [01 - hello world](./01-hello-world)
-- [02 - integers](./01-integers)
+- [02 - integers](./02-integers)
+- [03 - integers](./03-iteration)
