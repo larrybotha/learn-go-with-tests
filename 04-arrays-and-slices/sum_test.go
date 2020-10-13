@@ -62,3 +62,35 @@ func TestSumAllPure(t *testing.T) {
 		t.Errorf("expected %v to be %v", actual, expected)
 	}
 }
+
+func TestSumAllTails(t *testing.T) {
+	// pass in the test context to the helper from where its called
+	checkSums := func(t *testing.T, expected, actual []int) {
+		t.Helper()
+
+		if !reflect.DeepEqual(actual, expected) {
+			t.Errorf("expected %v to be %v", actual, expected)
+		}
+	}
+
+	t.Run("sums tails of all slices", func(t *testing.T) {
+		xs1 := []int{1, 1, 1}
+		xs2 := []int{2, 2, 2}
+
+		actual := SumAllTails(xs1, xs2)
+		expected := []int{2, 4}
+
+		checkSums(t, expected, actual)
+	})
+
+	t.Run("safely handles empty slices", func(t *testing.T) {
+		xs1 := []int{}
+		xs2 := []int{1}
+		xs3 := []int{1, 1, 1}
+
+		actual := SumAllTails(xs1, xs2, xs3)
+		expected := []int{0, 0, 2}
+
+		checkSums(t, expected, actual)
+	})
+}

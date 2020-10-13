@@ -51,5 +51,24 @@ func SumAll(xxs ...[]int) (sums []int) {
 		sums = append(sums, Sum(xs))
 	}
 
+	// assigning a value to an index greater than the slice's capacity will throw a
+	// runtime error - beware of this!
+	//sums[len(xxs)+1] = 4
+
+	return
+}
+
+func SumAllTails(xxs ...[]int) (sums []int) {
+	sums = []int{}
+
+	for _, xs := range xxs {
+		// Go's xs[n:m] syntax is similar to [].slice in Javascript
+		if len(xs) > 0 {
+			sums = append(sums, Sum(xs[1:]))
+		} else {
+			sums = append(sums, 0)
+		}
+	}
+
 	return
 }
