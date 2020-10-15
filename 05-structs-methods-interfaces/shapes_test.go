@@ -20,6 +20,15 @@ func assertWithGVerb(t *testing.T, expected, actual float64) {
 	}
 }
 
+func assertShapeArea(t *testing.T, shape Shape, expected float64) {
+	t.Helper()
+	actual := shape.Area()
+
+	if actual != expected {
+		t.Errorf("expected %g to be %g", actual, expected)
+	}
+}
+
 func TestPerimeter(t *testing.T) {
 	t.Run("calculates rectangle perimeter", func(t *testing.T) {
 		//actual := Perimeter(10.0, 10.0)
@@ -43,19 +52,18 @@ func TestPerimeter(t *testing.T) {
 func TestArea(t *testing.T) {
 	t.Run("calculates rectangle area", func(t *testing.T) {
 		//actual := Area(10.0, 10.0)
+		//rectangle := Rectangle{10.0, 10.0}
 		rectangle := Rectangle{10.0, 10.0}
-		actual := rectangle.Area()
 		expected := 100.0
 
-		assertWithFVerb(t, expected, actual)
+		assertShapeArea(t, rectangle, expected)
 	})
 
 	t.Run("calculates circle area", func(t *testing.T) {
 		//actual := Area(10.0, 10.0)
 		circle := Circle{10}
-		actual := circle.Area()
 		expected := 314.1592653589793
 
-		assertWithGVerb(t, expected, actual)
+		assertShapeArea(t, circle, expected)
 	})
 }
