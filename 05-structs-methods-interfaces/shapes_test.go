@@ -67,3 +67,25 @@ func TestArea(t *testing.T) {
 		assertShapeArea(t, circle, expected)
 	})
 }
+
+func TestArea_Table(t *testing.T) {
+	areaTests := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{name: "rectangle", shape: Rectangle{Width: 10.0, Height: 10.0}, want: 100},
+		{name: "circle", shape: Circle{Radius: 10}, want: 314.1592653589793},
+		{name: "triangle", shape: Triangle{Base: 12, Height: 6}, want: 36.0},
+	}
+
+	for _, tt := range areaTests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.shape.Area()
+
+			if got != tt.want {
+				t.Errorf("expected %#v area %g to be %g", tt.shape, got, tt.want)
+			}
+		})
+	}
+}
