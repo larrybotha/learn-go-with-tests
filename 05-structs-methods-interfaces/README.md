@@ -174,3 +174,8 @@
       }
     }
     ```
+- a specific test can be run using the name of the test:
+
+    ```bash
+    $ go test -run [TestName]
+    ```
