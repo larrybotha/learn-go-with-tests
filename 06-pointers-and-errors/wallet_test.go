@@ -6,31 +6,68 @@ import (
 )
 
 func TestWallet(t *testing.T) {
-	t.Run("test without pointers", func(t *testing.T) {
+	assertBalance := func(t *testing.T, wallet Wallet, want Bitcoin) {
+		t.Helper()
+
+		got := wallet.Balance()
+
+		if got != want {
+			// use %s so the String() prints our custom string value
+			t.Errorf("got %s, want %s", got, want)
+		}
+	}
+
+	assertError := func(t *testing.T, got error, want string) {
+		t.Helper()
+
+		if got == nil {
+			t.Fatal("expecting error but got nil")
+		}
+
+		if got.Error() != want {
+			t.Errorf("got %q, want %q", got.Error(), want)
+		}
+	}
+
+	t.Run("Deposit without pointers", func(t *testing.T) {
 		wallet := Wallet{}
 
-		fmt.Printf("address of wallet in DepositNoPointer test is %v\n", &wallet.balance)
+		// print with %#v - use Go's Stringer so that we can see the address without
+		// our own String() implementation on Bitcoin overriding it
+		fmt.Printf("address of wallet in DepositNoPointer test is %#v\n", &wallet.balance)
 
 		wallet.DepositNoPointer(Bitcoin(10))
 
-		got := wallet.Balance()
 		want := Bitcoin(0)
 
-		if got != want {
-			t.Errorf("got %d, wanted %d", got, want)
-		}
+		assertBalance(t, wallet, want)
 	})
 
-	t.Run("test with pointers", func(t *testing.T) {
+	t.Run("Deposit with pointers", func(t *testing.T) {
 		wallet := Wallet{}
 
 		wallet.Deposit(Bitcoin(10))
-
-		got := wallet.Balance()
 		want := Bitcoin(10)
 
-		if got != want {
-			t.Errorf("got %d, wanted %d", got, want)
-		}
+		assertBalance(t, wallet, want)
+	})
+
+	t.Run("Withdraw", func(t *testing.T) {
+		wallet := Wallet{10}
+
+		wallet.Withdraw(Bitcoin(5))
+
+		want := Bitcoin(5)
+
+		assertBalance(t, wallet, want)
+	})
+
+	t.Run("Withdraw with insufficient funds", func(t *testing.T) {
+		wallet := Wallet{Bitcoin(10)}
+
+		err := wallet.Withdraw(Bitcoin(100))
+
+		assertBalance(t, wallet, Bitcoin(10))
+		assertError(t, err, "cannot withdraw, insufficient funds")
 	})
 }

@@ -1,6 +1,9 @@
 package wallet
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 /*
 Type aliases can be defined using the following syntax:
@@ -8,6 +11,15 @@ type [TypeName] [originalType]
 */
 type Bitcoin int
 
+/*
+Any value that has a String() method is implementing the method defined on the
+Stringer interface
+
+String() defines the default way a value is printed
+
+When printing formattd strings, we'll need to use %s for String() to print our
+custom representation of the value
+*/
 func (b Bitcoin) String() string {
 	return fmt.Sprintf("%d BTC", b)
 }
@@ -28,7 +40,7 @@ func (w Wallet) DepositNoPointer(value Bitcoin) {
 		If we modify the copy, as we are doing in this functionn, the actual value
 		of the instance property remains unchanged
 	*/
-	fmt.Printf("address of wallet in DepositNoPointer func is %v\n", &w.balance)
+	fmt.Printf("address of wallet in DepositNoPointer func is %#v\n", &w.balance)
 
 	w.balance += value
 }
@@ -54,4 +66,14 @@ have a pointer receiver on Deposit, we make this a pointer receiver, too
 */
 func (w *Wallet) Balance() Bitcoin {
 	return w.balance
+}
+
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if amount > w.balance {
+		return errors.New("cannot withdraw, insufficient funds")
+	}
+
+	w.balance -= amount
+
+	return nil
 }
