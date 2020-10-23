@@ -6,7 +6,10 @@
 
 - [Takeaways](#takeaways)
   - [Go](#go)
+    - [Pointers](#pointers)
+    - [Error](#error)
   - [Tests](#tests)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -14,168 +17,54 @@
 
 ### Go
 
-- structs define the types of entities, and follow the pattern:
+#### Pointers
+
+- go passes values as copies in function parameters by default
+- the address of a value can be asserted by prepending the value with `&`
+- modifying a copy of a value when that value is an instance property is going
+    to do little
+- Go uses `*` to make a value passed into a function point to the original
+    value.
 
     ```golang
-    type SomeObject struct {
-      Property1 [type]
-      Property2 [type]
-    }
+    func myFunc(v *MyValue) {}
     ```
-- values defined by structs can be instantiated in one of 2 ways:
-  - implicit - property names are not provided, and are instantiated in the
-      order defined in the struct:
-
-      ```golang
-      type Animal struct {
-        Legs int
-        Eyes int
-      }
-
-      cat := Animal{4, 2}
-      ```
-  - explicit - property names are provided during instantiation:
-
-      ```golang
-      type Animal struct {
-        Legs int
-        Eyes int
-      }
-
-      cat := Animal{Legs: 4, Eyes: 2}
-      ```
-- properties of structs are accessed by name:
+- When defining methods, the receiver can either be a value receiver, or a
+    pointer receiver:
 
     ```golang
-    type Animal struct {
-      Legs int
-      Eyes int
-    }
+    // pointter receiver
+    func (t *MyType) MyMethod () {}
 
-    cat := Animal{Legs: 4, Eyes: 2}
-
-    fmt.Printf("%d", cat.Legs)
+    // value receiver
+    func (t *MyType) MyMethod () {}
     ```
-- methods on structs are defined at the location of the function definition, and
-    follow this pattern:
+- the receiver value of a method is equivalent to `this` in other languages
+- as a convention, keep the types of receivers the same for a struct or
+    interface. i.e., if one of the methods is a pointer receiver, then all of
+    the methods should be pointer receivers, even if the pointer is not required
+    internally
+- inside a method that uses a pointer receiver, Go automatically dereferences
+    the value, meaning that we don't need to  use `*` to reference the value -
+    Go does this for us (and it's still valid to use the value with the
+    pointer):
 
     ```golang
-    func (s StructName) MethodName(args ...) {}
-    ```
+    func (t *MyType) MyMethod() {
+        fmt.Println(t.myProperty)
 
-    e.g. for `Animal`:
-
-    ```golang
-    func (a Animal) GetAge() int {
-      return a.Age;
+        // is equivalent to
+        fmt.Println((*t).myProperty)
     }
     ```
-- the convention for defining methods is to use the lowercase first letter of
-    the struct as the name for the argument in the context section of the
-    function definition (i.e. where the name of the struct is used)
-- the argument to the context section of the method definition is a reference to
-    the instance of the struct, which can be used inside the function body. This
-    is equivalent to `this` in other programming languages
-- for structs that share similar methods, an interface can be used to define how
-    the method or properties should be defined
-    - unlike languages where it's common to use a `MyType implements
-        MyInterface` syntax, in Go, interface implementation is implicit
 
-        ```golang
-        // before - Area is a method on each struct, but with no relation
-        type Apple struct {
-          Vitamins int
-        }
+#### Error
 
-        func (a Apple) Nutrition() int {}
-
-        type Beef struct {
-          Proteins int
-        }
-
-        func (b Beef) Nutrition() int {}
-
-
-        // after - we use an interface to create a common definition for food.
-        // Now, if calculating the nutrition of a food, we can reference the
-        // type of a variable as Food
-        type Food interface {
-          Nutrition() int
-        }
-
-        type Apple struct {
-          Vitamins int
-        }
-
-        func (a Apple) Nutrition() int {}
-
-        type Beef struct {
-          Proteins int
-        }
-
-        func (b Beef) Nutrition() int {}
-        ```
-- the syntax for `range` in `for` loops is:
-
-    ```golang
-    for index, value := range xs {
-      //
-    }
-    ```
-- one can define anonymous structs during variable instantiation:
-
-    ```golang
-    myVar := struct {
-      name string
-      age  int
-    } {
-      name: "Joe",
-      age:  5
-    }
-
-    // or as a slice
-    xs := []struct {
-      foo string
-      bar int
-    } {
-      {foo: "a", bar: 1},
-      {foo: "b", bar: 2},
-    }
-    ```
-- `%v` will print the value of a variable
-  - `%+v` will print the value with field names
-  - `%#v` will print the value using Go's formatting
-- `%g` will print decimal numbers
+- errcheck
 
 ### Tests
 
-- Go allows for parameterised tests to be run using a simple `for` loop:
 
-    ```golang
-    func TestMyMethod(t *testing.T) {
-      tests := []struct {
-        name  string
-        value MyInterface
-        want  int
-      } {
-        {name: "test 1", value: StructA{1}, want: 1},
-        {name: "test 2", value: StructB{2}, want: 2},
-        {name: "test 3", value: StructA{3}, want: 3},
-      }
+## Resources
 
-      for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-          got := tt.value.MyMethod()
-
-          if got != tt.want {
-            t.Errorf("%#v: got %d, wanted %d", tt.value, got, tt.want)
-          }
-        })
-      }
-    }
-    ```
-- a specific test can be run using the name of the test:
-
-    ```bash
-    $ go test -run [TestName]
-    ```
+- [Don't just check errors, handle them gracefully](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
