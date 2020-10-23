@@ -6,29 +6,6 @@ import (
 )
 
 func TestWallet(t *testing.T) {
-	assertBalance := func(t *testing.T, wallet Wallet, want Bitcoin) {
-		t.Helper()
-
-		got := wallet.Balance()
-
-		if got != want {
-			// use %s so the String() prints our custom string value
-			t.Errorf("got %s, want %s", got, want)
-		}
-	}
-
-	assertError := func(t *testing.T, got error, want string) {
-		t.Helper()
-
-		if got == nil {
-			t.Fatal("expecting error but got nil")
-		}
-
-		if got.Error() != want {
-			t.Errorf("got %q, want %q", got.Error(), want)
-		}
-	}
-
 	t.Run("Deposit without pointers", func(t *testing.T) {
 		wallet := Wallet{}
 
@@ -55,11 +32,13 @@ func TestWallet(t *testing.T) {
 	t.Run("Withdraw", func(t *testing.T) {
 		wallet := Wallet{10}
 
-		wallet.Withdraw(Bitcoin(5))
+		err := wallet.Withdraw(Bitcoin(5))
 
 		want := Bitcoin(5)
 
 		assertBalance(t, wallet, want)
+
+		assertNoError(t, err)
 	})
 
 	t.Run("Withdraw with insufficient funds", func(t *testing.T) {
@@ -68,6 +47,43 @@ func TestWallet(t *testing.T) {
 		err := wallet.Withdraw(Bitcoin(100))
 
 		assertBalance(t, wallet, Bitcoin(10))
-		assertError(t, err, "cannot withdraw, insufficient funds")
+		assertError(t, err, ErrInsufficientFunds)
 	})
+}
+
+/*
+Move helpers out of tests so that tests have less noise
+
+Helpers are also below the tests, so that users can read the tests before seeing
+the helpers
+*/
+func assertBalance(t *testing.T, wallet Wallet, want Bitcoin) {
+	t.Helper()
+
+	got := wallet.Balance()
+
+	if got != want {
+		// use %s so the String() prints our custom string value
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func assertError(t *testing.T, got error, want error) {
+	t.Helper()
+
+	if got == nil {
+		t.Fatal("expecting error but got nil")
+	}
+
+	if got.Error() != want.Error() {
+		t.Errorf("got %q, want %q", got.Error(), want)
+	}
+}
+
+func assertNoError(t *testing.T, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Fatal("got an error but didn't want one")
+	}
 }

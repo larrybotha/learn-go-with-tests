@@ -12,6 +12,19 @@ type [TypeName] [originalType]
 type Bitcoin int
 
 /*
+Using var we can create package globals which are available outside of the package
+
+This also neatens up our Withdraw method, while allowing us to evaluate that this
+error is used in our tests, instead of testing the explicit string output, which is
+brittle
+
+This type of error is known as a sentinel error, and should be avoided as it creates
+tight coupling with packages that depend on this value:
+https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully
+*/
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+
+/*
 Any value that has a String() method is implementing the method defined on the
 Stringer interface
 
@@ -29,7 +42,7 @@ type Wallet struct {
 }
 
 /*
-this type of receiver is called a value received
+this type of receiver is called a value receiver
 */
 func (w Wallet) DepositNoPointer(value Bitcoin) {
 	/*
@@ -59,7 +72,7 @@ func (w *Wallet) Deposit(value Bitcoin) {
 }
 
 /*
-As a convention in Go, one should keep method receives consistent
+As a convention in Go, one should keep method receivers consistent
 
 This receiver does not need to be a pointer receiver, but because we
 have a pointer receiver on Deposit, we make this a pointer receiver, too
@@ -70,7 +83,7 @@ func (w *Wallet) Balance() Bitcoin {
 
 func (w *Wallet) Withdraw(amount Bitcoin) error {
 	if amount > w.balance {
-		return errors.New("cannot withdraw, insufficient funds")
+		return ErrInsufficientFunds
 	}
 
 	w.balance -= amount
