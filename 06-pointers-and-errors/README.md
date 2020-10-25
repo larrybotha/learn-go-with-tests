@@ -103,7 +103,7 @@
     var InvalidPassword = errors.New("Invalid password")
     ```
 
-    - this type of error is called a sentinel - see [this articl](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+    - this type of error is called a sentinel - see [this article](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
     - a sentinel is a named error that is exported. The problem with exporting
         an error like this is it ties other packages to your package - if the
         error changes or is removed, packages relying on it will break. Avoid
