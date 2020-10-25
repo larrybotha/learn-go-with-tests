@@ -18,3 +18,4 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [04 - arrays and slices](./04-arrays-and-slices)
 - [05 - structs, methods, and interfaces](./05-structs-methods-interfaces)
 - [06 - pointers and errors](./06-pointers-and-errors)
+- [07 - maps](./07-maps)
