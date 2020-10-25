@@ -17,6 +17,27 @@
 
 ### Go
 
+- a type alias is defined in the following way:
+
+    ```golang
+    type [TypeAlias] [originalType]
+    ```
+- the `Stringer` interface has a `String` method which allows one to customise
+    how values are printed. e.g.
+
+    ```golang
+    // create a type alias
+    type MyMoneyType int
+
+    func (m MyMoneyType) String() {
+        fmt.Printf("%d ChaChing!", m)
+    }
+    ```
+
+    - values printed with formatting need to be printed with the `%s` flag to
+        indicate the value should be printed as a string
+
+
 #### Pointers
 
 - go passes values as copies in function parameters by default
@@ -33,7 +54,7 @@
     pointer receiver:
 
     ```golang
-    // pointter receiver
+    // pointer receiver
     func (t *MyType) MyMethod () {}
 
     // value receiver
@@ -57,13 +78,44 @@
         fmt.Println((*t).myProperty)
     }
     ```
+- using `var` to define a top-level value in a package will make that variable
+    available outside of the package
 
 #### Error
 
-- errcheck
+- error messages are represented by the builtin interface `error`
+- `error.Error()` can be called to get the message in an error
+- functions often return an error, which should be evaluated to determine if an
+    error has been thrown, otherwise the app crash due to runtime errors
+- [errcheck](https://github.com/kisielk/errcheck) can be used to determine if
+    one's code has not handled any returned errors
+
+    ```bash
+    # run in current directory where a function is not handdling a returned
+    # error:
+    $ errcheck
+    wallet_test.go:35:18: wallet.Withdraw(Bitcoin(5))
+    ```
+- errors can be created using `errors.New("error message")`:
+
+    ```golang
+    // make InvalidPassword available globally
+    var InvalidPassword = errors.New("Invalid password")
+    ```
+
+    - this type of error is called a sentinel - see [this articl](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+    - a sentinel is a named error that is exported. The problem with exporting
+        an error like this is it ties other packages to your package - if the
+        error changes or is removed, packages relying on it will break. Avoid
+        exporting sentinels
+- errors are not thrown in Go - one returns errors from inside functions, and
+    that error should be evaluated at the call site
 
 ### Tests
 
+- helpers can be defined outside of the actual tests. By placing helpers after
+    our tests, we make it easier for users who are evaluating our packages to
+    read our tests instead of wading through the noise of helpers
 
 ## Resources
 
