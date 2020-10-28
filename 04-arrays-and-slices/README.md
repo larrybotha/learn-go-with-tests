@@ -35,7 +35,7 @@
     xs := make([]int, len, cap)
     ```
 
-    - `make`s first argument is the type of slice to create
+    - `make`'s first argument is the type of slice to create
     - `len` is the number of items to initialise the slice with
     - `cap` is the capacity of the slice - if an item is assigned to an index
         beyond the capacity of a slice, a runtime error will be thrown

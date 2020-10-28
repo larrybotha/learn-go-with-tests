@@ -58,7 +58,7 @@
     func (t *MyType) MyMethod () {}
 
     // value receiver
-    func (t *MyType) MyMethod () {}
+    func (t MyType) MyMethod () {}
     ```
 - the receiver value of a method is equivalent to `this` in other languages
 - as a convention, keep the types of receivers the same for a struct or
