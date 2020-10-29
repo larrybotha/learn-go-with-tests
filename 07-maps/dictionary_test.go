@@ -32,9 +32,23 @@ func TestSearch(t *testing.T) {
 		dictionary := Dictionary{"test": value}
 
 		_, err := dictionary.Search("foo")
-		want := "no value for this key"
 
-		assertError(t, err, want)
+		assertError(t, err, ErrNoValue)
+	})
+}
+
+func TestAdd(t *testing.T) {
+	t.Run("adds a value to the dictionary", func(t *testing.T) {
+		key := "foo"
+		value := "bar"
+
+		dictionary := Dictionary{}
+		dictionary.Add(key, value)
+
+		got, _ := dictionary.Search(key)
+		want := value
+
+		assertString(t, got, want)
 	})
 }
 
@@ -46,14 +60,14 @@ func assertString(t *testing.T, got, want string) {
 	}
 }
 
-func assertError(t *testing.T, err error, want string) {
+func assertError(t *testing.T, err error, want error) {
 	t.Helper()
 
 	if err == nil {
 		t.Fatal("expected error, got none")
 	}
 
-	if err.Error() != want {
-		t.Errorf("got %s, want %s", err.Error(), want)
+	if err != want {
+		t.Errorf("got %q, want %q", err, want)
 	}
 }

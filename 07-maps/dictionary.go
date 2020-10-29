@@ -20,3 +20,8 @@ func (d Dictionary) Search(key string) (string, error) {
 
 	return value, err
 }
+
+func (d Dictionary) Add(key, value string) {
+	// maps are passed by reference - no need to use a pointer
+	d[key] = value
+}
