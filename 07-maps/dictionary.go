@@ -1,27 +1,45 @@
 package main
 
-import "errors"
-
 func Search(dictionary map[string]string, key string) string {
 	return dictionary[key]
 }
 
 type Dictionary map[string]string
 
-var ErrNoValue = errors.New("no value for this key")
+const (
+	ErrNotFound   = DictionaryErr("no value for this key")
+	ErrWordExists = DictionaryErr("word exists")
+)
+
+type DictionaryErr string
+
+func (e DictionaryErr) Error() string {
+	return string(e)
+}
 
 func (d Dictionary) Search(key string) (string, error) {
 	value, ok := d[key]
 	var err error
 
 	if !ok {
-		err = ErrNoValue
+		err = ErrNotFound
 	}
 
 	return value, err
 }
 
-func (d Dictionary) Add(key, value string) {
-	// maps are passed by reference - no need to use a pointer
-	d[key] = value
+func (d Dictionary) Add(word, definition string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case ErrNotFound:
+		d[word] = definition
+	case nil:
+		return ErrWordExists
+	// handle Search returning any other error
+	default:
+		return err
+	}
+
+	return nil
 }
