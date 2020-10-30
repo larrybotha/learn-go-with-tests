@@ -7,6 +7,7 @@
 - [Takeaways](#takeaways)
   - [Go](#go)
   - [Tests](#tests)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -17,3 +18,7 @@
 
 ### Tests
 
+
+## Resources
+
+- [Constant errors](https://dave.cheney.net/2016/04/07/constant-errors)
