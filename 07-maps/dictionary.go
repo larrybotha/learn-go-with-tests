@@ -7,8 +7,9 @@ func Search(dictionary map[string]string, key string) string {
 type Dictionary map[string]string
 
 const (
-	ErrNotFound   = DictionaryErr("no value for this key")
-	ErrWordExists = DictionaryErr("word exists")
+	ErrNotFound              = DictionaryErr("no value for this key")
+	ErrWordExists            = DictionaryErr("word exists")
+	ErrUpdateNonExistentWord = DictionaryErr("word doesn't exist")
 )
 
 type DictionaryErr string
@@ -45,5 +46,19 @@ func (d Dictionary) Add(word, definition string) error {
 }
 
 func (d Dictionary) Update(word, definition string) error {
-	return nil
+	_, err := d.Search(word)
+
+	switch err {
+	case ErrNotFound:
+		return ErrUpdateNonExistentWord
+	case nil:
+		d[word] = definition
+		return nil
+	default:
+		return err
+	}
+}
+
+func (d Dictionary) Delete(word string) {
+	delete(d, word)
 }

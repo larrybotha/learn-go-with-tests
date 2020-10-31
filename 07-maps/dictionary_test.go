@@ -76,6 +76,31 @@ func TestUpdate(t *testing.T) {
 		assertError(t, err, nil)
 		assertDefinition(t, d, word, newDescription)
 	})
+
+	t.Run("errors updating when no word in dict", func(t *testing.T) {
+		word := "foo"
+		description := "bar"
+
+		d := Dictionary{}
+		err := d.Update(word, description)
+
+		assertError(t, err, ErrUpdateNonExistentWord)
+	})
+}
+
+func TestDelete(t *testing.T) {
+	t.Run("deletes an existing word", func(t *testing.T) {
+		word := "foo"
+		description := "bar"
+		d := Dictionary{}
+
+		d.Add(word, description)
+		d.Delete(word)
+
+		_, err := d.Search(word)
+
+		assertError(t, err, ErrNotFound)
+	})
 }
 
 func assertDefinition(t *testing.T, d Dictionary, word, definition string) {
