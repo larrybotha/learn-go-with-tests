@@ -1,0 +1,10 @@
+name: learn-go-with-tests
+root: <%= Dir.pwd %>
+
+windows:
+  - frontend:
+      layout: main-vertical
+      panes:
+        - nvim
+        - nodemon -e go -w . --exec "go test -v ./0* || exit 1"
+        -
