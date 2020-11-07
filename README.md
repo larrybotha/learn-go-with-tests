@@ -21,6 +21,7 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [06 - pointers and errors](./06-pointers-and-errors)
 - [07 - maps](./07-maps)
 - [08 - dependency injection](./08-dependency-injection)
+- [09 - mocking](./09-mocking)
 
 ## Resources
 
