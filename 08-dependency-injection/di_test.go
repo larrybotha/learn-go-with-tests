@@ -10,9 +10,6 @@ func TestGreet(t *testing.T) {
 		// bytes.Buffer implements Writer
 		buffer := bytes.Buffer{}
 
-		// why is buffer passed in with an &?
-		// https://stackoverflow.com/questions/23454940/getting-bytes-buffer-does-not-implement-io-writer-error-message/53263087#53263087
-		// https://www.geeksforgeeks.org/pointers-in-golang/
 		/*
 			if an address is not provided here, we get the following error:
 
