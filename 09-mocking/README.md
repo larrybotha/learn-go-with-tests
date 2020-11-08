@@ -21,3 +21,7 @@
 
 ## Resources
 
+- [Uncle Bob's "When to mock"](https://blog.cleancoder.com/uncle-bob/2014/05/10/WhenToMock.html)
+- [The little mocker](https://blog.cleancoder.com/uncle-bob/2014/05/14/TheLittleMocker.html)
+    - A conversation covering the differences between mocks, stubs, spies, and
+        other test doubles
