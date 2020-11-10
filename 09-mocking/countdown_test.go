@@ -81,6 +81,8 @@ func (s *CountdownOperationsSpy) Sleep() {
 func (s *CountdownOperationsSpy) Write(p []byte) (n int, err error) {
 	s.Calls = append(s.Calls, write)
 
+	// without this return, and the returned values in the signature, this method
+	// would fail to implement io.Writer.Write
 	return
 }
 
