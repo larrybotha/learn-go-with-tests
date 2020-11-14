@@ -117,6 +117,7 @@
       }
     }
     ```
+- one can have Go indicate race errors by running tests with `-race`
 
 ### Tests
 
