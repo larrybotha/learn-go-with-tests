@@ -24,6 +24,9 @@ func ConfigurableRacer(a, b string, timeout time.Duration) (winner string, err e
 		return a, nil
 	case <-ping(b):
 		return b, nil
+		/*
+			time.After returns a channel that returns a value after a provided duration
+		*/
 	case <-time.After(timeout):
 		return "", fmt.Errorf("timed out waiting for %q and %q", a, b)
 	}
