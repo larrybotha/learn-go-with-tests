@@ -24,6 +24,9 @@ func TestRace(t *testing.T) {
 		want := fastUrl
 		got, err := Racer(slowUrl, fastUrl)
 
+		/*
+			prevent further execution of this test by using t.Fatal if we get an error
+		*/
 		if err != nil {
 			t.Fatalf("got an error, didn't expect one: %v", err)
 		}
