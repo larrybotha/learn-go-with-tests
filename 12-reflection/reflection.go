@@ -7,15 +7,39 @@ import (
 func walk(x interface{}, fn func(string)) {
 	val := getValue(x)
 
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
+	numValues := 0
+	var getField func(int) reflect.Value
 
-		switch field.Kind() {
-		case reflect.String:
-			fn(field.String())
-		case reflect.Struct:
-			walk(field.Interface(), fn)
+	walkValue := func(value reflect.Value) {
+		walk(value.Interface(), fn)
+	}
+
+	switch val.Kind() {
+	case reflect.String:
+		fn(val.String())
+
+	case reflect.Struct:
+		for i := 0; i < val.NumField(); i++ {
+			walkValue(val.Field(i))
 		}
+
+	case reflect.Slice:
+		numValues = val.Len()
+		getField = val.Index
+
+	case reflect.Array:
+		numValues = val.Len()
+		getField = val.Index
+
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walk(val.MapIndex(key).Interface(), fn)
+		}
+	}
+
+	for i := 0; i < numValues; i++ {
+		field := getField(i)
+		walk(field.Interface(), fn)
 	}
 }
 

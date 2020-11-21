@@ -60,12 +60,30 @@ func TestWalk(t *testing.T) {
 		},
 
 		{
-			"struct with slices",
-			[]Person{
-				{"foo", Profile{1, "bar"}},
-				{"baz", Profile{2, "quux"}},
+			"slices",
+			[]Profile{
+				{1, "foo"},
+				{2, "bar"},
 			},
-			[]string{"foo", "bar", "baz", "quux"},
+			[]string{"foo", "bar"},
+		},
+
+		{
+			"arrays",
+			[2]Profile{
+				{1, "foo"},
+				{2, "bar"},
+			},
+			[]string{"foo", "bar"},
+		},
+
+		{
+			"maps",
+			map[string]string{
+				"foo": "bar",
+				"baz": "quux",
+			},
+			[]string{"bar", "quux"},
 		},
 	}
 
