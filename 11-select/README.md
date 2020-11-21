@@ -7,7 +7,6 @@
 - [Takeaways](#takeaways)
   - [Go](#go)
   - [Tests](#tests)
-- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,6 +61,4 @@
     possible assertions that could be evaluated after the current one and it
     fails
 - `http.httptest` can be used to create servers and generate URLs for tests
-
-## Resources
 
