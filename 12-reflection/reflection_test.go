@@ -111,6 +111,42 @@ func TestWalk(t *testing.T) {
 
 		}
 	})
+
+	t.Run("with channels", func(t *testing.T) {
+		channel := make(chan Profile)
+
+		go func() {
+			channel <- Profile{1, "foo"}
+			channel <- Profile{2, "bar"}
+			close(channel)
+		}()
+
+		want := []string{"foo", "bar"}
+		var got []string
+
+		walk(channel, func(value string) {
+			got = append(got, value)
+		})
+
+		for _, x := range want {
+			assertContains(t, got, x)
+		}
+	})
+
+	t.Run("with func", func(t *testing.T) {
+		fn := func() (Profile, Profile) { return Profile{1, "foo"}, Profile{2, "bar"} }
+
+		want := []string{"foo", "bar"}
+		var got []string
+
+		walk(fn, func(value string) {
+			got = append(got, value)
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
 }
 
 func assertContains(t *testing.T, xs []string, value string) {
