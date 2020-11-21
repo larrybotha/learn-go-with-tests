@@ -25,6 +25,7 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [10 - concurrency](./10-concurrency)
 - [11 - select](./11-select)
 - [12 - reflection](./12-reflection)
+- [13 - sync](./13-sync)
 
 ## Resources
 
