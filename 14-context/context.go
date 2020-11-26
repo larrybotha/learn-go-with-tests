@@ -1,17 +1,19 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
 
 type Store interface {
-	Fetch() string
+	Fetch(ctx context.Context) (string, error)
 	Cancel()
 }
 
 func Server(store Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		/*
 		// get context from request
 		ctx := r.Context()
 		// create a channel which will receive a string, and has size 1
@@ -35,6 +37,7 @@ func Server(store Store) http.HandlerFunc {
 		// responsible for doing what it wants when Cancel is executed
 		case <-ctx.Done():
 			store.Cancel()
+			*/
 		}
 	}
 }
