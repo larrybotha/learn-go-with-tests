@@ -2,26 +2,12 @@ package server
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 )
-
-type StoreSpy struct {
-	response  string
-	cancelled bool
-	t         *testing.T
-}
-
-func (s *StoreSpy) Fetch() string {
-	time.Sleep(10 * time.Millisecond)
-	return s.response
-}
-
-func (s *StoreSpy) Cancel() {
-	s.cancelled = true
-}
 
 func TestHandler(t *testing.T) {
 	t.Run("handles basic requests", func(t *testing.T) {
@@ -44,25 +30,48 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("allows cancelling requests", func(t *testing.T) {
-		store := &StoreSpy{response: "foo", t: t}
+		data := "foo"
+		store := &StoreSpy{response: data, t: t}
 		server := Server(store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
 
-		// Create a derived context from the request
-		// context.WithCancel returns a cancel function which can cancel the context
 		cancellingContext, cancel := context.WithCancel(request.Context())
 		time.AfterFunc(5*time.Millisecond, cancel)
-		// create a shallow copy of request, setting the cancellingContext as its
-		// context
 		request = request.WithContext(cancellingContext)
 
-		response := httptest.NewRecorder()
+		response := &ResponseWriterSpy{}
 
 		server.ServeHTTP(response, request)
 
-		store.assertWasCancelled()
+		if response.written {
+			t.Error("no response should have been written")
+		}
 	})
+}
+
+type ResponseWriterSpy struct {
+	written bool
+}
+
+func (r *ResponseWriterSpy) Header() http.Header {
+	r.written = true
+	return nil
+}
+
+func (r *ResponseWriterSpy) Write([]byte) (int, error) {
+	r.written = true
+	return 0, errors.New("not implemented")
+}
+
+func (r *ResponseWriterSpy) WriteHeader(statusCode int) {
+	r.written = true
+}
+
+type StoreSpy struct {
+	response  string
+	cancelled bool
+	t         *testing.T
 }
 
 func (s *StoreSpy) assertWasCancelled() {
@@ -79,4 +88,52 @@ func (s *StoreSpy) assertWasNotCancelled() {
 	if s.cancelled {
 		s.t.Error("was cancelled when it should not have been")
 	}
+}
+
+func (s *StoreSpy) Fetch(ctx context.Context) (string, error) {
+	// create a channel that will receive 1 value
+	data := make(chan string, 1)
+
+	// start a goroutine
+	go func() {
+		var result string
+
+		// iterate over the response property of the store
+		// we iterate over individual characters simulate a long request
+		// - this seems odd... why not simply iterate over a slice of length 1 with
+		// a long timeout?
+		for _, c := range s.response {
+			// select the first channel to receive a value
+			select {
+			// if the context is done, we know that it's been cancelled, either from
+			// an explicit cancel, or because of an error
+			case <-ctx.Done():
+				s.t.Log("spy store got cancelled")
+				return
+
+				// otherwise we simulate a request taking some time
+			default:
+				time.Sleep(10 * time.Millisecond)
+				result += string(c)
+			}
+		}
+
+		// once we are done iterating over s.response, send the result to the channel
+		data <- result
+	}()
+
+	// this select waits for the goroutine to complete
+	select {
+	// if "cancel" is called for the context, return an empty string, and return
+	// the reason for the cancellation
+	case <-ctx.Done():
+		return "", ctx.Err()
+		// if our channel receives a value, then return that value, and a nil error
+	case res := <-data:
+		return res, nil
+	}
+}
+
+func (s *StoreSpy) Cancel() {
+	s.cancelled = true
 }
