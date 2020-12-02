@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -43,6 +44,8 @@ func TestHandler(t *testing.T) {
 		response := &ResponseWriterSpy{}
 
 		server.ServeHTTP(response, request)
+
+		fmt.Printf("%v\n", response)
 
 		if response.written {
 			t.Error("no response should have been written")
