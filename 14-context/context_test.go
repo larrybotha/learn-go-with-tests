@@ -50,20 +50,25 @@ func TestHandler(t *testing.T) {
 	})
 }
 
+// define our own ResponseWriter spy because httptest.ResponseRecorder doesn't allow
+// for us to evaluate whether a response is written or not
 type ResponseWriterSpy struct {
 	written bool
 }
 
+// ResponseWrite has a Header method we need to implement
 func (r *ResponseWriterSpy) Header() http.Header {
 	r.written = true
 	return nil
 }
 
+// ResponseWriter has a Write  method we need to implement
 func (r *ResponseWriterSpy) Write([]byte) (int, error) {
 	r.written = true
 	return 0, errors.New("not implemented")
 }
 
+// ResponseWriter has a WriteHeader method we need to implement
 func (r *ResponseWriterSpy) WriteHeader(statusCode int) {
 	r.written = true
 }
