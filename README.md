@@ -27,6 +27,7 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [12 - reflection](./12-reflection)
 - [13 - sync](./13-sync)
 - [14 - context](./14-context)
+- [15 - intro to property based tests](./15-intro-to-property-based-tests)
 
 ## Resources
 
