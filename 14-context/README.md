@@ -16,7 +16,19 @@
 
 - context in Go allows one to share data between calls, much in the same way as
     in React and Svelte
-- to create a new context, one uses `context.Context()`
+- to create a new context, one may use:
+    - `context.Context()` - creates a context
+    - `context.WithCancel(ctx)` - create a copy of `ctx` that allows for cancelling
+        contextj
+    - `context.WithDeadline(ctx, time)` - create a copy of `ctx` that will be done if
+        the time passed in is exceeded
+    - `context.WithTimeout(ctx, duration)` - create a copy of `ctx` that will be
+        done after a specified duration
+- a context's `Done()` method returns a channel that will receive a value when
+    the context errors, its deadline is passed, it's timeout is exceeded, or it
+    is cancelled
+- it is discouraged to pass values around using context and `context.Value`, as
+    the value contained in the context is not typed
 
 ### Tests
 
