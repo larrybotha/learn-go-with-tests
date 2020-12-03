@@ -17,7 +17,7 @@
 - one can use `interface{}` in Go much in the same way as one can use `any` in
     Typescript
     - consequently, it should be avoided
-- to values that are passed into functions that use `interface{}` as a
+- to inspect / evaluate values that are passed into functions that use `interface{}` as a
     parameter, one can use `reflect`
 - `reflect.ValueOf(x)` returns a `reflect.Value` that describes the value
 - `reflect.Value.Kind()` returns the type of `reflect.Value`. This could be one
