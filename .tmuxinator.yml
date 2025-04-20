@@ -6,5 +6,4 @@ windows:
       layout: main-vertical
       panes:
         - nvim
-        - nodemon -e go -w . --exec "go test -v ./0* || exit 1"
         -
