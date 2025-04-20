@@ -1,4 +1,4 @@
-module github.com/larrybotha/learn-go-with-tests/06-pointers-and-errors
+module github.com/larrybotha/learn-go-with-tests/2020/06-pointers-and-errors
 
 go 1.15
 
