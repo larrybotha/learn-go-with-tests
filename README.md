@@ -13,9 +13,11 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 
 ## Sections
 
-- [01 - hello world](./01-hello-world)
+- [01 - hello world](./01-hello-world/hello.go)
+- [02 - integers](./02-integers/adder.go)
 
 ## Resources
 
 - [Golang Docs](https://golangdocs.com/)
+
 
