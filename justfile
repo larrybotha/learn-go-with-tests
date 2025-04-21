@@ -2,7 +2,7 @@ watch path:
   watchexec --exts go just test {{ path }}
 
 test path:
-  (cd {{ path }} && go test -v)
+  (cd {{ path }} && go test -v -cover)
 
 bench path:
   # -bench -> run benchmarks
