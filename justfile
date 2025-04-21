@@ -1,5 +1,5 @@
 watch path:
   ( \
     cd {{ path }} && \
-    watchexec --clear --exts go go test \
+    watchexec --clear --exts go go test -v \
   )
