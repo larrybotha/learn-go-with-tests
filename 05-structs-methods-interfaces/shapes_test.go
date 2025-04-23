@@ -3,41 +3,60 @@ package shapes
 import "testing"
 
 func TestPerimeter(t *testing.T) {
-	rectangle := Rectangle{Width: 10.0, Height: 10.0}
-	got := Perimeter(rectangle)
-	want := 40.0
+	perimeterTests := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{
+			name:  "rectangle",
+			shape: Rectangle{Width: 10.0, Height: 10.0},
+			want:  40.0,
+		},
+		{
+			name:  "circle",
+			shape: Circle{Radius: 10.0},
+			want:  62.83185307179586,
+		},
+	}
 
-	if got != want {
-		t.Errorf("got %.2f, want %.2f", got, want)
+	for _, x := range perimeterTests {
+		t.Run(x.name, func(t *testing.T) {
+			got := x.shape.Perimeter()
+
+			if got != x.want {
+				t.Errorf("%#v, got %g, want %g", x, got, x.want)
+			}
+		})
 	}
 }
 
 func TestArea(t *testing.T) {
-	rectangle := Rectangle{Width: 10.0, Height: 10.0}
-	got := Area(rectangle)
-	want := 100.0
+	areaTests := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{
+			name:  "rectangle",
+			shape: Rectangle{Width: 10.0, Height: 10.0},
+			want:  100.0,
+		},
+		{
+			name:  "circle",
+			shape: Circle{Radius: 10.0},
+			want:  314.1592653589793,
+		},
+		{"triangle", Triangle{12, 6}, 36.0},
+	}
 
-	if got != want {
-		t.Errorf("got %.2f, want %.2f", got, want)
+	for _, x := range areaTests {
+		t.Run(x.name, func(t *testing.T) {
+			got := x.shape.Area()
+
+			if got != x.want {
+				t.Errorf("%#v, got %g, want %g", x, got, x.want)
+			}
+		})
 	}
 }
-
-//
-//t.Run("calculates perimeter", func(t *testing.T) {
-//  got := Rectangle.Perimeter(10.0, 10.0)
-//  want := 40.0
-//
-//  if got != want {
-//    t.Errorf("got %.2f, want %.2f", got, want)
-//  }
-//})
-//
-//t.Run("calculates area", func(t *testing.T) {
-//  got := Rectangle.Area(10.0, 10.0)
-//  want := 100.0
-//
-//  if got != want {
-//    t.Errorf("got %.2f, want %.2f", got, want)
-//  }
-//})
-//
