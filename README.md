@@ -17,11 +17,10 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [02 - integers](./02-integers/adder.go)
 - [03 - iteration](./03-iteration/iteration.go)
 - [04 - arrays and slices](./04-arrays-and-slices/sum.go)
+- [05 - structs, methods, and interfaces](./05-structs-methods-interfaces/shapes_test.go)
+- [06 - pointers and errors](./06-pointers-and-errors/wallet_test.go)
 
 ## Resources
 
 - [Golang Docs](https://golangdocs.com/)
-
-
-
 
