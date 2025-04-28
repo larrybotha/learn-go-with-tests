@@ -1,8 +1,17 @@
-watch path:
-  watchexec --exts go just test {{ path }}
+watch-tests path:
+  watchexec --clear --exts go just test {{ path }}
+
+watch-checks path:
+  watchexec --clear --exts go 'just vet {{ path }} && just errcheck {{ path }}'
+
+vet path:
+  @(cd {{ path }} && go vet)
+
+errcheck path:
+  @(cd {{ path }} && errcheck)
 
 test path:
-  (cd {{ path }} && go test -v -cover)
+  @(cd {{ path }} && go test -v -cover)
 
 bench path:
   # -bench -> run benchmarks

@@ -6,4 +6,5 @@ windows:
       layout: main-vertical
       panes:
         - nvim
-        -
+        - just watch-tests
+        - just watch-checks
