@@ -1,3 +1,6 @@
+watch-run path:
+  watchexec --clear --exts go go run {{ path }}
+
 watch-tests path:
   watchexec --clear --exts go just test {{ path }}
 
