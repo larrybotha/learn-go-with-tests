@@ -21,10 +21,12 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [06 - pointers and errors](./06-pointers-and-errors/wallet_test.go)
 - [07 - maps](./07-maps/dictionary.go)
 - [08 - dependency injection](./08-dependency-injection/di_test.go)
+- [09 - mocking](./09-mocking/countdown_test.go)
 
 ## Resources
 
 - [Golang Docs](https://golangdocs.com/)
+
 
 
 
