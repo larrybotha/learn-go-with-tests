@@ -8,3 +8,4 @@ windows:
         - nvim
         - just watch-tests
         - just watch-checks
+        - just watch-run
