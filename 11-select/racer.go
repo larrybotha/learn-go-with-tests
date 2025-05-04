@@ -1,6 +1,7 @@
 package racer
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -16,15 +17,23 @@ func RacerNaive(a, b string) string {
 	return b
 }
 
-func Racer(a, b string) (winner string) {
+const tenSecondTimeout = time.Second * 10
+
+func Racer(a, b string) (string, error) {
+	return ConfigurableRacer(a, b, tenSecondTimeout)
+}
+
+func ConfigurableRacer(a, b string, timeout time.Duration) (string, error) {
 	// select allows for waiting on multiple channels
 	// The first channel to send a value 'wins', and the case statement
 	// is executed
 	select {
 	case <-ping(a):
-		return a
+		return a, nil
 	case <-ping(b):
-		return b
+		return b, nil
+	case <-time.After(timeout):
+		return "", fmt.Errorf("timed out waiting for %s and %s", a, b)
 	}
 }
 

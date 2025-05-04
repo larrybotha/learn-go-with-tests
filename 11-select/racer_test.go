@@ -23,7 +23,9 @@ func TestRacer(t *testing.T) {
 			fastUrl := fastServer.URL
 
 			want := fastUrl
-			got := Racer(slowUrl, fastUrl)
+			got, err := Racer(slowUrl, fastUrl)
+
+			assertNotError(t, err)
 
 			if got != want {
 				t.Errorf("got %q, want %q", got, want)
@@ -34,22 +36,18 @@ func TestRacer(t *testing.T) {
 	t.Run(
 		"returns an error if a server doesn't respond within 10s",
 		func(t *testing.T) {
-			slowServer := makeDelayedServer(time.Second * 12)
-			fastServer := makeDelayedServer(time.Second * 11)
+			server := makeDelayedServer(time.Millisecond * 25)
 
-			defer func() {
-				fastServer.Close()
-				slowServer.Close()
-			}()
+			defer server.Close()
 
-			slowUrl := slowServer.URL
-			fastUrl := fastServer.URL
+			_, err := ConfigurableRacer(
+				server.URL,
+				server.URL,
+				time.Millisecond*20,
+			)
 
-			want := fastUrl
-			got := Racer(slowUrl, fastUrl)
-
-			if got != want {
-				t.Errorf("got %q, want %q", got, want)
+			if err == nil {
+				t.Error("expected error, got nil")
 			}
 		},
 	)
@@ -66,4 +64,12 @@ func makeDelayedServer(n time.Duration) *httptest.Server {
 			w.WriteHeader(http.StatusOK)
 		}),
 	)
+}
+
+func assertNotError(t *testing.T, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Errorf("got %v, wanted nil", err)
+	}
 }
