@@ -24,10 +24,14 @@ Notes and annotations from [Learn Go With Tests](https://quii.gitbook.io/learn-g
 - [09 - mocking](./09-mocking/countdown_test.go)
 - [10 - concurrency](./10-concurrency/concurrency_test.go)
 - [11 - select](./10-concurrency/concurrency_test.go)
+- [12 - reflection](./12-reflection/reflection_test.go)
+- [13 - sync](./13-sync)
 
 ## Resources
 
 - [Golang Docs](https://golangdocs.com/)
+
+
 
 
 
