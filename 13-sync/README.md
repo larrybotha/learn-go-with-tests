@@ -19,10 +19,34 @@
         function to a package, returning the value in the safe form by default
 - `go vet` can pick up code where a `Mutex` will be copied - passing a pointer to the
     value resolves the issue
+- embedding is a an approach where a value's methods are made directly available on its
+    containing struct, e.g.
+
+    ```go
+    package main
+
+    import "sync"
+
+    type MyStruct struct {
+        sync.Mutex // embedded mutex
+    }
+
+    func main() {
+        x := MyStruct{}
+
+        // Mutex.[Lock | Unlock] are available on the struct
+        x.Lock()
+        x.Unlock()
+    }
+    ```
+
+    It may be convenient, but is likely a code-smell, and confusingly exposes values
+    that should likely be internal to a struct on its public API
 
 ## links and resources
 
 - https://go.dev/wiki/MutexOrChannel
+
 
 
 
